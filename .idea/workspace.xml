@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="dbb5554f-1701-45bd-b9e2-f3d011ec09c1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/ci/taskcat.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ci/taskcat.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/NetworkSetup.template" beforeDir="false" afterPath="$PROJECT_DIR$/templates/NetworkSetup.template" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -36,20 +35,20 @@
         <counts>
           <entry key="json" value="70" />
           <entry key="template" value="17" />
-          <entry key="yml" value="30" />
+          <entry key="yml" value="37" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JSON" value="87" />
-          <entry key="YAML" value="30" />
+          <entry key="YAML" value="37" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/NetworkSetup.template">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="337">
@@ -58,11 +57,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ci/taskcat.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="15" lean-forward="true" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
+            <state relative-caret-position="240">
+              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
             </state>
           </provider>
         </entry>
@@ -84,9 +83,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/ci/taskcat.yml" />
         <option value="$PROJECT_DIR$/templates/NetworkSetup.template" />
         <option value="$PROJECT_DIR$/ci/network_parameters.json" />
+        <option value="$PROJECT_DIR$/ci/taskcat.yml" />
       </list>
     </option>
   </component>
@@ -159,11 +158,11 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24954791" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24954791" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Terminal" />
+      <window_info active="true" anchor="bottom" id="Terminal" visible="true" weight="0.32946634" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -181,13 +180,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ci/taskcat.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="15" lean-forward="true" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ci/network_parameters.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -199,6 +191,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="337">
           <caret line="35" column="29" lean-forward="true" selection-start-line="35" selection-start-column="29" selection-end-line="35" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ci/taskcat.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
         </state>
       </provider>
     </entry>
