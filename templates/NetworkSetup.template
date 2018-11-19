@@ -1,0 +1,377 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Network template, creates a new VPC with private and public subnets in two availability zones based on classic 3-Tier setup.",
+  "Parameters": {
+    		"Owner": {
+			"Description": "Admin e-mail as contact point",
+			"Type": "String",
+			"AllowedPattern": "^[\\x20-\\x45]?[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$",
+			"ConstraintDescription": "Must be a valid email address"
+
+		}
+  },
+  "Resources": {
+    "GenericVPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsSupport": true,
+        "EnableDnsHostnames": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Generic"
+          }
+        ]
+      }
+    },
+    "GenericpublicSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "DependsOn": [
+        "AttachGateway"
+      ],
+      "Properties": {
+        "CidrBlock": "10.0.0.0/24",
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "VpcId": {
+          "Ref": "GenericVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Generic-Subnet-Public1"
+          }
+        ]
+      }
+    },
+    "GenericpublicSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "DependsOn": [
+        "AttachGateway"
+      ],
+      "Properties": {
+        "CidrBlock": "10.0.4.0/24",
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "1",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "VpcId": {
+          "Ref": "GenericVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Generic-Subnet-Public2"
+          }
+        ]
+      }
+    },
+    "GenericprivateSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "DependsOn": [
+        "AttachGateway"
+      ],
+      "Properties": {
+        "CidrBlock": "10.0.8.0/24",
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "VpcId": {
+          "Ref": "GenericVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Generic-Subnet-Private1"
+          }
+        ]
+      }
+    },
+    "GenericprivateSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "DependsOn": [
+        "AttachGateway"
+      ],
+      "Properties": {
+        "CidrBlock": "10.0.12.0/24",
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "1",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "VpcId": {
+          "Ref": "GenericVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Generic-Subnet-Private2"
+          }
+        ]
+      }
+    },
+    "GenericprivateDBSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "DependsOn": [
+        "AttachGateway"
+      ],
+      "Properties": {
+        "CidrBlock": "10.0.16.0/24",
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "0",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "VpcId": {
+          "Ref": "GenericVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Generic-DBSubnet-Private1"
+          }
+        ]
+      }
+    },
+    "GenericprivateDBSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "DependsOn": [
+        "AttachGateway"
+      ],
+      "Properties": {
+        "CidrBlock": "10.0.20.0/24",
+        "AvailabilityZone": {
+          "Fn::Select": [
+            "1",
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "VpcId": {
+          "Ref": "GenericVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Generic-DBSubnet-Private2"
+          }
+        ]
+      }
+    },
+    "GenericRTPublic": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "GenericVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Generic-RTB-Public"
+          }
+        ]
+      }
+    },
+    "GenericIG": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Generic-IG-Public"
+          }
+        ]
+      }
+    },
+    "AttachGateway": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "GenericVPC"
+        },
+        "InternetGatewayId": {
+          "Ref": "GenericIG"
+        }
+      }
+    },
+    "GenericroutePublic": {
+      "Type": "AWS::EC2::Route",
+      "DependsOn": [
+        "AttachGateway"
+      ],
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "RouteTableId": {
+          "Ref": "GenericRTPublic"
+        },
+        "GatewayId": {
+          "Ref": "GenericIG"
+        }
+      }
+    },
+    "subnetRouteTableAssociationPublic1": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "GenericRTPublic"
+        },
+        "SubnetId": {
+          "Ref": "GenericpublicSubnet1"
+        }
+      }
+    },
+    "subnetRouteTableAssociationPublic2": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "GenericRTPublic"
+        },
+        "SubnetId": {
+          "Ref": "GenericpublicSubnet2"
+        }
+      }
+    },
+    "GenericRTPrivate": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "GenericVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Generic-RTB-Private"
+          }
+        ]
+      }
+    },
+    "GenericRTDBPrivate": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "GenericVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Generic-RTB-DBPrivate"
+          }
+        ]
+      }
+    },
+    "subnetRouteTableAssociationPrivate1": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "GenericRTPrivate"
+        },
+        "SubnetId": {
+          "Ref": "GenericprivateSubnet1"
+        }
+      }
+    },
+    "subnetRouteTableAssociationPrivate2": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "GenericRTPrivate"
+        },
+        "SubnetId": {
+          "Ref": "GenericprivateSubnet2"
+        }
+      }
+    },
+    "subnetRouteTableAssociationDBPrivate1": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "GenericRTDBPrivate"
+        },
+        "SubnetId": {
+          "Ref": "GenericprivateDBSubnet1"
+        }
+      }
+    },
+    "subnetRouteTableAssociationDBPrivate2": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "GenericRTDBPrivate"
+        },
+        "SubnetId": {
+          "Ref": "GenericprivateDBSubnet2"
+        }
+      }
+    },
+    "GenericSnGroup": {
+      "Type": "AWS::RDS::DBSubnetGroup",
+      "DependsOn": [
+        "GenericVPC",
+        "AttachGateway"
+      ],
+      "Properties": {
+        "DBSubnetGroupDescription": "The RDS Private subnet group",
+        "DBSubnetGroupName": "GenericSnGroup",
+        "SubnetIds": [
+          {
+            "Ref": "GenericprivateDBSubnet1"
+          },
+          {
+            "Ref": "GenericprivateDBSubnet2"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Generic-DBSubnetGroup"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs" : {
+  "PublicSubnetID":{
+      "Value":{"Ref":"GenericpublicSubnet1"},
+      "Export" : { "Name" : "PublicSubnetID" }
+  },
+  "GenericVpcId" : {
+    "Description": "The VpcId of the generic vpc",
+    "Value" : { "Ref": "GenericVPC" },
+    "Export" : { "Name" : "GenericVpcId" }
+    },
+   "GenericIGW" : {
+    "Description": "The IGW id of the generic IGW",
+    "Value" : { "Ref": "GenericIG" },
+    "Export" : { "Name" : "GenericIGW" }
+    },
+    "GenericPrivateDBRT": {
+      "Description": "The Route Table id of the Private DB RT",
+      "Value": { "Ref": "GenericRTDBPrivate"},
+      "Export": { "Name" : "GenericRT"}
+    }
+  }
+}
