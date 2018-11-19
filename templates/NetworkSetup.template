@@ -1,13 +1,22 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "Network template, creates a new VPC with private and public subnets in two availability zones based on classic 3-Tier setup.",
+  "Parameters": {
+    		"Owner": {
+			"Description": "Admin e-mail as contact point",
+			"Type": "String",
+			"AllowedPattern": "^[\\x20-\\x45]?[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$",
+			"ConstraintDescription": "Must be a valid email address"
+
+		}
+  },
   "Resources": {
     "GenericVPC": {
       "Type": "AWS::EC2::VPC",
       "Properties": {
         "CidrBlock": "10.0.0.0/16",
-        "EnableDnsSupport": "true",
-        "EnableDnsHostnames": "true",
+        "EnableDnsSupport": true,
+        "EnableDnsHostnames": true,
         "InstanceTenancy": "default",
         "Tags": [
           {
@@ -20,7 +29,6 @@
     "GenericpublicSubnet1": {
       "Type": "AWS::EC2::Subnet",
       "DependsOn": [
-        "GenericVPC",
         "AttachGateway"
       ],
       "Properties": {
@@ -47,7 +55,6 @@
     "GenericpublicSubnet2": {
       "Type": "AWS::EC2::Subnet",
       "DependsOn": [
-        "GenericVPC",
         "AttachGateway"
       ],
       "Properties": {
@@ -74,7 +81,6 @@
     "GenericprivateSubnet1": {
       "Type": "AWS::EC2::Subnet",
       "DependsOn": [
-        "GenericVPC",
         "AttachGateway"
       ],
       "Properties": {
@@ -101,7 +107,6 @@
     "GenericprivateSubnet2": {
       "Type": "AWS::EC2::Subnet",
       "DependsOn": [
-        "GenericVPC",
         "AttachGateway"
       ],
       "Properties": {
@@ -128,7 +133,6 @@
     "GenericprivateDBSubnet1": {
       "Type": "AWS::EC2::Subnet",
       "DependsOn": [
-        "GenericVPC",
         "AttachGateway"
       ],
       "Properties": {
@@ -155,7 +159,6 @@
     "GenericprivateDBSubnet2": {
       "Type": "AWS::EC2::Subnet",
       "DependsOn": [
-        "GenericVPC",
         "AttachGateway"
       ],
       "Properties": {
@@ -218,7 +221,6 @@
     "GenericroutePublic": {
       "Type": "AWS::EC2::Route",
       "DependsOn": [
-        "GenericRTPublic",
         "AttachGateway"
       ],
       "Properties": {
@@ -233,10 +235,6 @@
     },
     "subnetRouteTableAssociationPublic1": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "DependsOn": [
-        "GenericRTPublic",
-        "GenericpublicSubnet1"
-      ],
       "Properties": {
         "RouteTableId": {
           "Ref": "GenericRTPublic"
@@ -248,10 +246,6 @@
     },
     "subnetRouteTableAssociationPublic2": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "DependsOn": [
-        "GenericRTPublic",
-        "GenericpublicSubnet2"
-      ],
       "Properties": {
         "RouteTableId": {
           "Ref": "GenericRTPublic"
@@ -263,9 +257,6 @@
     },
     "GenericRTPrivate": {
       "Type": "AWS::EC2::RouteTable",
-      "DependsOn": [
-        "GenericVPC"
-      ],
       "Properties": {
         "VpcId": {
           "Ref": "GenericVPC"
@@ -280,9 +271,6 @@
     },
     "GenericRTDBPrivate": {
       "Type": "AWS::EC2::RouteTable",
-      "DependsOn": [
-        "GenericVPC"
-      ],
       "Properties": {
         "VpcId": {
           "Ref": "GenericVPC"
@@ -297,10 +285,6 @@
     },
     "subnetRouteTableAssociationPrivate1": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "DependsOn": [
-        "GenericRTPrivate",
-        "GenericprivateSubnet1"
-      ],
       "Properties": {
         "RouteTableId": {
           "Ref": "GenericRTPrivate"
@@ -312,10 +296,6 @@
     },
     "subnetRouteTableAssociationPrivate2": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "DependsOn": [
-        "GenericRTPrivate",
-        "GenericprivateSubnet2"
-      ],
       "Properties": {
         "RouteTableId": {
           "Ref": "GenericRTPrivate"
@@ -327,10 +307,6 @@
     },
     "subnetRouteTableAssociationDBPrivate1": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "DependsOn": [
-        "GenericRTDBPrivate",
-        "GenericprivateDBSubnet1"
-      ],
       "Properties": {
         "RouteTableId": {
           "Ref": "GenericRTDBPrivate"
@@ -342,10 +318,6 @@
     },
     "subnetRouteTableAssociationDBPrivate2": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
-      "DependsOn": [
-        "GenericRTDBPrivate",
-        "GenericprivateDBSubnet2"
-      ],
       "Properties": {
         "RouteTableId": {
           "Ref": "GenericRTDBPrivate"
@@ -359,9 +331,7 @@
       "Type": "AWS::RDS::DBSubnetGroup",
       "DependsOn": [
         "GenericVPC",
-        "AttachGateway",
-        "GenericprivateDBSubnet1",
-        "GenericprivateDBSubnet2"
+        "AttachGateway"
       ],
       "Properties": {
         "DBSubnetGroupDescription": "The RDS Private subnet group",

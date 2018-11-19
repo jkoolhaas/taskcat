@@ -10,7 +10,7 @@ global:
   reporting: true
 tests:
   taskcat-json:
-    parameter_input: 
+    parameter_input: network_parameters.json
     regions:
-      - us-east-1
+      - eu-west-1
     template_file: NetworkSetup.template
